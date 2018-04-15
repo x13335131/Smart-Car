@@ -101,18 +101,13 @@ public class MovementClient extends Client {  //Movement client extends from cli
         ui.updateArea(movement.getResponse());
     }
     @Override
-    public void updatePoll(String msg) {//should be in json
-        if (msg.equals("Moved.")) {
-            isMoving = false;
-        }
-        if (msg.equals("Stopped.")) {
-            isStopping = false;
-        }
-        if (msg.equals("EngineOn.")) {
-            engineOn = false;
-        }
-        if (msg.equals("EngineOff.")) {
-            engineOff = false;
+    public void updatePoll(String msg) {
+        json = new Gson().toJson(new MovementModel(MovementModel.Operation.MOVED));
+        msg = sendMessage(json);//sendMessage method is in client class
+        movement = new Gson().fromJson(msg, MovementModel.class); //conversion
+        System.out.println("Client Received " + json);
+        if (movement.getOperation() == MovementModel.Operation.MOVED) {
+            isMoving = movement.getValue();
         }
     }
 

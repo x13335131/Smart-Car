@@ -20,7 +20,8 @@ public class MovementModel {
         ACCELERATE, 
         SLOWDOWN,
         ENGINEON, 
-        ENGINEOFF
+        ENGINEOFF,
+        MOVED
     }
 
     private Operation operation;
