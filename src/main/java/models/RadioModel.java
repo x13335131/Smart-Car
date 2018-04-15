@@ -19,7 +19,8 @@ public class RadioModel {
         RADIOON,
         RADIOOFF,
         NEXT,
-        PREVIOUS
+        PREVIOUS,
+        ISRADIOON
     }
 
     private Operation operation;

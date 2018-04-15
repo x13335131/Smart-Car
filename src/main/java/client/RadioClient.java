@@ -80,7 +80,16 @@ public class RadioClient extends Client { //Radio client extends from client
         //print response to ui
         ui.updateArea(radio.getResponse());
     }
- 
+  @Override
+    public void updatePoll(String msg) {
+        json = new Gson().toJson(new RadioModel(RadioModel.Operation.ISRADIOON));
+        msg = sendMessage(json);//sendMessage method is in client class
+        radio = new Gson().fromJson(msg, RadioModel.class); //conversion
+        System.out.println("Client Received " + json);
+        if (radio.getOperation() == RadioModel.Operation.ISRADIOON) {
+            radioON = radio.getValue();
+        }
+    }
     @Override
     public void disable() {
         super.disable();
