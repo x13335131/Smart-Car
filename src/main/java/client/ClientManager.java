@@ -36,6 +36,8 @@ public class ClientManager implements ServiceListener {
         //adding the different clients to array
         clients.add(new MovementClient());
         clients.add(new RadioClient());
+        clients.add(new PhoneClient());
+        clients.add(new TemperatureClient());
 
         try {
             //looks for a jdms instance and creates a service listener for all the types of services the clients are interested in eg radio, phone, temp etc
