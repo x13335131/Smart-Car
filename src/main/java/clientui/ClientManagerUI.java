@@ -15,7 +15,6 @@ import client.ClientManager;
 public class ClientManagerUI extends JFrame {
 
     private final JTabbedPane allPanels; //tabs 
-    private static final long serialVersionUID = -4512962459244007477L;
 
     public ClientManagerUI(final ClientManager clientManager) {
         super("Smart Car");

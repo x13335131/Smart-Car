@@ -29,7 +29,7 @@ public abstract class ClientUI extends JPanel implements ActionListener {
      * The Constant serialVersionUID.
      */
     private static final long serialVersionUID = 1L;
-    protected JComboBox services;//this is where it shows if its dominics or pauls bath etc
+    protected JComboBox services;//this is where it shows if its marys or joans phone etc
     protected JPanel controls;
     protected JTextArea textArea;
     protected JScrollPane scroll;
@@ -46,8 +46,8 @@ public abstract class ClientUI extends JPanel implements ActionListener {
         add(services);
         services.setBounds(170, 5, 200, 30);
         controls = new JPanel();
-        controls.setBounds(5, UIConstants.CONTROLY, UIConstants.COMPONENTWIDTH,
-                50);
+        controls.setBounds(UIConstants.CONTROLX, UIConstants.CONTROLY, UIConstants.COMPONENTWIDTH,
+                UIConstants.COMPONENTHEIGHT);
         controls.setLayout(new FlowLayout());
         controls.setBorder(BorderFactory.createLineBorder(Color.black));
         add(controls);
