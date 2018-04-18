@@ -8,9 +8,9 @@ import serviceui.ServiceUI;
 
 /**
  * The Class MovementService.
+ *
  * @author Louise O'Connor, x13335131
  */
-
 public class MovementService extends Service {//Movement Service extends service class 
 
     private final Timer timer1;
@@ -35,28 +35,29 @@ public class MovementService extends Service {//Movement Service extends service
 
     /*
         *MovementService Constructor*
-    */
+     */
     public MovementService(String name) {
         super(name, "_movement._udp.local.");
         timer1 = new Timer();
         engineOn = false;
         engineOff = true;
         speed = 0;
-        maxSpeed=30;
+        maxSpeed = 30;
         stopped = false;
         isMoving = false;
         isStopping = false;
         faster = false;
-        isTown=false;
-        isRegional=false;
-        isNational=false;
-        isMotorway=false;
+        isTown = false;
+        isRegional = false;
+        isNational = false;
+        isMotorway = false;
         ui = new ServiceUI(this, name);
 
     }
+
     /*
         *Method performing different actions*
-    */
+     */
     @Override
     public void performAction(String a) {
         System.out.println("recieved: " + a);
@@ -116,7 +117,7 @@ public class MovementService extends Service {//Movement Service extends service
                 sendBack(json);
                 SERVICE_UI_MESSAGE = (engineOff) ? "The Engine is turned off" : "The engine is off";
                 ui.updateArea(SERVICE_UI_MESSAGE);
-             case "MOVED":
+            case "MOVED":
                 System.out.println("Moved");
                 msg = (isMoving) ? "Car is moving" : "Car is not moving";
                 json = new Gson().toJson(new MovementModel(MovementModel.Operation.MOVED, msg, isMoving));
@@ -171,28 +172,30 @@ public class MovementService extends Service {//Movement Service extends service
         }
 
     }
+
     private void getRoad(String rd) {
-    if(rd == "town"){
-        maxSpeed=50;
-        isTown=true;
+        if (rd == "town") {
+            maxSpeed = 50;
+            isTown = true;
+        }
+        if (rd == "regional") {
+            maxSpeed = 80;
+            isRegional = true;
+        }
+        if (rd == "national") {
+            maxSpeed = 100;
+            isNational = true;
+        }
+        if (rd == "motorway") {
+            maxSpeed = 120;
+            isMotorway = true;
+        }
     }
-    if(rd == "regional"){
-        maxSpeed=80;
-        isRegional=true;
-    }
-    if(rd == "national"){
-        maxSpeed=100;
-        isNational=true;
-    }
-    if(rd == "motorway"){
-        maxSpeed=120;
-        isMotorway=true;
-    }
-    }
+
     class RemindTask extends TimerTask {
 
         @Override
-         public void run() {//every time run method gets called it adds 10%, once its less that 100
+        public void run() {//every time run method gets called it adds 10%, once its less that 100
             if (speed <= maxSpeed && isMoving == true) {
                 if (speed == maxSpeed) {
                     ui.updateArea(getStatus());
@@ -221,13 +224,13 @@ public class MovementService extends Service {//Movement Service extends service
             return "Car is Stopped";
         }
         if (speed == 200) {
-            return "Car is at Max speed of "+maxSpeed+" kph";
+            return "Car is at Max speed of " + maxSpeed + " kph";
         }
         return "Car is at a speed of " + speed + " kph.";
     }
 
     public static void main(String[] args) {
-        new MovementService("Louise's");
+        new MovementService(Constants.Movement_service_name);
     }
 
     public void accelerate() {

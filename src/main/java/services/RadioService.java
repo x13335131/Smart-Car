@@ -170,6 +170,6 @@ public class RadioService extends Service { //extends service class
     }
 
     public static void main(String[] args) {
-        new RadioService("Shauna's");
+        new RadioService(Constants.Radio_service_name);
     }
 }

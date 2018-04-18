@@ -43,8 +43,7 @@ public class TemperatureService extends Service { //extends service class
 
         if (null == temp.getOperation()) {
             sendBack(BAD_COMMAND + " - " + a);
-        } 
-        else{// if it gets a request
+        } else {// if it gets a request
             switch (temp.getOperation()) {
                 case STATUS: {
                     msg = getStatus();
@@ -78,35 +77,35 @@ public class TemperatureService extends Service { //extends service class
                 }
                 case INCREASE: {
                     Increase();
-                    msg = ""+tempTemp; //concatinating the string with the temperature
-                    timer.schedule(new RemindTask(), 0, 2000); 
+                    msg = "" + tempTemp; //concatinating the string with the temperature
+                    timer.schedule(new RemindTask(), 0, 2000);
                     json = new Gson().toJson(new TemperatureModel(TemperatureModel.Operation.INCREASE, msg));
                     System.out.println(json);
                     sendBack(json);
-                    SERVICE_UI_MESSAGE = "Increasing temperature "+tempTemp;
+                    SERVICE_UI_MESSAGE = "Increasing temperature " + tempTemp;
                     ui.updateArea(SERVICE_UI_MESSAGE);
                     break;
                 }
                 case DECREASE: {
                     Decrease();
-                    msg = ""+tempTemp;
-                    timer.schedule(new RemindTask(), 0, 2000); 
+                    msg = "" + tempTemp;
+                    timer.schedule(new RemindTask(), 0, 2000);
                     json = new Gson().toJson(new TemperatureModel(TemperatureModel.Operation.DECREASE, msg));
                     System.out.println(json);
                     sendBack(json);
-                    SERVICE_UI_MESSAGE = "Decreasing temperature "+tempTemp;
+                    SERVICE_UI_MESSAGE = "Decreasing temperature " + tempTemp;
                     ui.updateArea(SERVICE_UI_MESSAGE);
                     break;
                 }
                 case CONFIRM: {
                     Confirm();
                     heating = false;
-                    msg =  ""+maxTemp;
+                    msg = "" + maxTemp;
                     timer.schedule(new RemindTask(), 0, 2000);
                     json = new Gson().toJson(new TemperatureModel(TemperatureModel.Operation.CONFIRM, msg));
                     System.out.println(json);
                     sendBack(json);
-                    SERVICE_UI_MESSAGE = "Confirmed. New max temp "+maxTemp;
+                    SERVICE_UI_MESSAGE = "Confirmed. New max temp " + maxTemp;
                     ui.updateArea(SERVICE_UI_MESSAGE);
                     break;
                 }
@@ -123,8 +122,7 @@ public class TemperatureService extends Service { //extends service class
             isHeating = true;//make it heat
             ui.updateArea("Car is heating");
 
-        } 
-        else {//it is heating
+        } else {//it is heating
             beginHeating = false;
             ui.updateArea("Car is already heating");
         }
@@ -136,8 +134,7 @@ public class TemperatureService extends Service { //extends service class
             isHeating = false;//stop it heating
             ui.updateArea("Temperature is cooling");
 
-        } 
-        else {
+        } else {
             beginCooling = false; //already cooling;
             ui.updateArea("Car is already cooling");
         }
@@ -149,7 +146,7 @@ public class TemperatureService extends Service { //extends service class
     }
 
     private void Decrease() {
-        if (tempTemp <= 35 && tempTemp> 25) {
+        if (tempTemp <= 35 && tempTemp > 25) {
             tempTemp = tempTemp - 1;
         }
         tempTemp = tempTemp;
@@ -172,21 +169,18 @@ public class TemperatureService extends Service { //extends service class
                 if (degrees == maxTemp) {
                     ui.updateArea(getStatus());
 
-                } 
-                else {
+                } else {
                     degrees += 1;
                     //cooling=true;
                 }
-            } 
-            else if (degrees >= 0 && heating == false) {
+            } else if (degrees >= 0 && heating == false) {
                 if (degrees == 0) {
                     ui.updateArea(getStatus());
                 } else {
                     degrees -= 1;
                     // heating=false;
                 }
-            } 
-            else {
+            } else {
                 ui.updateArea(getStatus());
             }
 
@@ -200,13 +194,12 @@ public class TemperatureService extends Service { //extends service class
         }
         if (degrees == maxTemp) {
             return "car is at max temp of " + degrees;
-        } 
-        else {
+        } else {
             return "Car is currently " + degrees + " degrees.";
         }
     }
 
     public static void main(String[] args) {
-        new TemperatureService("Sandra's");
+        new TemperatureService(Constants.Temperature_service_name);
     }
 }
