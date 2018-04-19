@@ -2,7 +2,6 @@
  * 
  */
 package client;
-//tester branch
 
 import clientui.RadioUI;
 import com.google.gson.Gson;
@@ -16,6 +15,7 @@ import models.RadioModel;
 public class RadioClient extends Client { //Radio client extends from client
 
     private final String RADIOON;
+    private final String ISRADIOON;
     private final String RADIOOFF;
     private final String NEXT;
     private final String PREVIOUS;
@@ -33,6 +33,7 @@ public class RadioClient extends Client { //Radio client extends from client
         this.NEXT = "Next";
         this.RADIOOFF = "RadioOff";
         this.RADIOON = "RadioOn";
+        this.ISRADIOON="isRadioOn";
         //specifies it wants to talk to radio services
         serviceType = "_radio._udp.local.";
         ui = new RadioUI(this);//new ui
@@ -49,6 +50,10 @@ public class RadioClient extends Client { //Radio client extends from client
             case "RADIOOFF":
                 json = new Gson().toJson(new RadioModel(RadioModel.Operation.RADIOOFF));
                 System.out.println("Radio Off");
+                break;
+           case "ISRADIOON":
+                json = new Gson().toJson(new RadioModel(RadioModel.Operation.ISRADIOON));
+                System.out.println("Is radio On");
                 break;
             case "NEXT":
                 json = new Gson().toJson(new RadioModel(RadioModel.Operation.NEXT));
@@ -75,13 +80,16 @@ public class RadioClient extends Client { //Radio client extends from client
             radioON = radio.getValue();
         } else if (radio.getOperation() == RadioModel.Operation.PREVIOUS) {
             radioON = radio.getValue();
-        }else {
+        } else if (radio.getOperation() == RadioModel.Operation.ISRADIOON) {
+            radioON = radio.getValue();
+        } else {
             System.out.println("No valid action found");
         }
         //print response to ui
         ui.updateArea(radio.getResponse());
     }
-  @Override
+ 
+   @Override
     public void updatePoll(String msg) {
         json = new Gson().toJson(new RadioModel(RadioModel.Operation.ISRADIOON));
         msg = sendMessage(json);//sendMessage method is in client class
