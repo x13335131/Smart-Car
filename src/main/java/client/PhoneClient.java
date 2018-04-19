@@ -42,7 +42,7 @@ public class PhoneClient extends Client { //extends from the client
         this.BLUETOOTHON = "BluetoothOn";
         this.DISCONNECT = "Disconnect";
         this.CONNECT = "Connect";
-        this.PLAYMUSIC = "Play" //talks to the phone service
+        this.PLAYMUSIC = "Play"; //talks to the phone service
         serviceType = "_phone._udp.local.";
         ui = new PhoneUI(this);//generate PhoneUI
         name = "Phone";
@@ -93,11 +93,11 @@ public class PhoneClient extends Client { //extends from the client
 
     @Override
     public void updatePoll(String msg) {
-        json = new Gson().toJson(new PhoneModel(PhoneModel.Operation.CONNECT));
+        json = new Gson().toJson(new PhoneModel(PhoneModel.Operation.MSG));
         msg = sendMessage(json);//sendMessage is initialized in the client class
         phone = new Gson().fromJson(msg, PhoneModel.class); //converted from gson to json
         System.out.println("Client Received " + json);
-        if (phone.getOperation() == PhoneModel.Operation.CONNECT) {
+        if (phone.getOperation() == PhoneModel.Operation.MSG) {
             isConnected = phone.getValue();
         }
     }
