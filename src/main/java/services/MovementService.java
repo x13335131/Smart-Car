@@ -8,9 +8,9 @@ import serviceui.ServiceUI;
 
 /**
  * The Class MovementService.
+ *
  * @author Louise O'Connor, x13335131
  */
-
 public class MovementService extends Service {//Movement Service extends service class 
 
     private final Timer timer1;
@@ -22,6 +22,11 @@ public class MovementService extends Service {//Movement Service extends service
     private boolean engineOff;
     private boolean faster;
     private boolean isStopped;
+    private boolean isTown;
+    private boolean isRegional;
+    private boolean isNational;
+    private boolean isMotorway;
+    private int maxSpeed;
     private String action;
     private String msg;
     private String json;
@@ -30,23 +35,29 @@ public class MovementService extends Service {//Movement Service extends service
 
     /*
         *MovementService Constructor*
-    */
+     */
     public MovementService(String name) {
         super(name, "_movement._udp.local.");
         timer1 = new Timer();
         engineOn = false;
         engineOff = true;
         speed = 0;
+        maxSpeed = 30;
         stopped = false;
         isMoving = false;
         isStopping = false;
         faster = false;
+        isTown = false;
+        isRegional = false;
+        isNational = false;
+        isMotorway = false;
         ui = new ServiceUI(this, name);
 
     }
+
     /*
         *Method performing different actions*
-    */
+     */
     @Override
     public void performAction(String a) {
         System.out.println("recieved: " + a);
@@ -106,7 +117,55 @@ public class MovementService extends Service {//Movement Service extends service
                 sendBack(json);
                 SERVICE_UI_MESSAGE = (engineOff) ? "The Engine is turned off" : "The engine is off";
                 ui.updateArea(SERVICE_UI_MESSAGE);
-
+            case "MOVED":
+                System.out.println("Moved");
+                msg = (isMoving) ? "Car is moving" : "Car is not moving";
+                json = new Gson().toJson(new MovementModel(MovementModel.Operation.MOVED, msg, isMoving));
+                System.out.println(json);
+                sendBack(json);
+                SERVICE_UI_MESSAGE = (isMoving) ? "Car is moving" : "Car is not moving";
+                ui.updateArea(SERVICE_UI_MESSAGE);
+                break;
+            case "TOWN":
+                getRoad("town");
+                System.out.println("Town");
+                msg = (isTown) ? "In town/city area. These areas have a speed limit of 50kph" : "Is not town";
+                json = new Gson().toJson(new MovementModel(MovementModel.Operation.TOWN, msg, isTown));
+                System.out.println(json);
+                sendBack(json);
+                SERVICE_UI_MESSAGE = (isTown) ? "In town/city area. These areas have a speed limit of 50kph" : "Is not town";
+                ui.updateArea(SERVICE_UI_MESSAGE);
+                break;
+            case "REGIONAL":
+                getRoad("regional");
+                System.out.println("Regional");
+                msg = (isRegional) ? "On Regional Road. Regional roads have a speed limit of 80kph" : "Is not Regional";
+                json = new Gson().toJson(new MovementModel(MovementModel.Operation.REGIONAL, msg, isRegional));
+                System.out.println(json);
+                sendBack(json);
+                SERVICE_UI_MESSAGE = (isRegional) ? "On Regional Road. Regional roads have a speed limit of 80kph" : "Is not Regional";
+                ui.updateArea(SERVICE_UI_MESSAGE);
+                break;
+            case "NATIONAL":
+                getRoad("national");
+                System.out.println("National");
+                msg = (isNational) ? "On National Road. National roads have a speed limit of 100kph" : "Is not national";
+                json = new Gson().toJson(new MovementModel(MovementModel.Operation.NATIONAL, msg, isNational));
+                System.out.println(json);
+                sendBack(json);
+                SERVICE_UI_MESSAGE = (isNational) ? "On National Road. National roads have a speed limit of 100kph" : "Is not national";
+                ui.updateArea(SERVICE_UI_MESSAGE);
+                break;
+            case "MOTORWAY":
+                getRoad("motorway");
+                System.out.println("Motorway");
+                msg = (isMotorway) ? "On Motorway. Motorway has a speed limit of 120kph" : "Is not motorway";
+                json = new Gson().toJson(new MovementModel(MovementModel.Operation.MOTORWAY, msg, isMotorway));
+                System.out.println(json);
+                sendBack(json);
+                SERVICE_UI_MESSAGE = (isMotorway) ? "On Motorway. Motorway has a speed limit of 120" : "Is not motorway";
+                ui.updateArea(SERVICE_UI_MESSAGE);
+                break;
             //else print the following:
             default:
                 sendBack(BAD_COMMAND + " - " + a);
@@ -114,12 +173,31 @@ public class MovementService extends Service {//Movement Service extends service
 
     }
 
+    private void getRoad(String rd) {
+        if (rd == "town") {
+            maxSpeed = 50;
+            isTown = true;
+        }
+        if (rd == "regional") {
+            maxSpeed = 80;
+            isRegional = true;
+        }
+        if (rd == "national") {
+            maxSpeed = 100;
+            isNational = true;
+        }
+        if (rd == "motorway") {
+            maxSpeed = 120;
+            isMotorway = true;
+        }
+    }
+
     class RemindTask extends TimerTask {
 
         @Override
         public void run() {//every time run method gets called it adds 10%, once its less that 100
-            if (speed <= 200 && isMoving == true) {
-                if (speed == 200) {
+            if (speed <= maxSpeed && isMoving == true) {
+                if (speed == maxSpeed) {
                     ui.updateArea(getStatus());
                 } else {
                     speed += 5;
@@ -132,8 +210,8 @@ public class MovementService extends Service {//Movement Service extends service
                 } else {
                     speed -= 5;
                 }
-                
-            }else{
+
+            } else {
                 ui.updateArea(getStatus());
             }
 
@@ -146,13 +224,13 @@ public class MovementService extends Service {//Movement Service extends service
             return "Car is Stopped";
         }
         if (speed == 200) {
-            return "Car is at Max speed";
+            return "Car is at Max speed of " + maxSpeed + " kph";
         }
         return "Car is at a speed of " + speed + " kph.";
     }
 
     public static void main(String[] args) {
-        new MovementService("Louise's");
+        new MovementService(Constants.Movement_service_name);
     }
 
     public void accelerate() {

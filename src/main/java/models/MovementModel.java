@@ -21,7 +21,8 @@ public class MovementModel {
         SLOWDOWN,
         ENGINEON, 
         ENGINEOFF,
-        MOVED
+        MOVED, 
+        TOWN, REGIONAL, NATIONAL, MOTORWAY
     }
 
     private Operation operation;

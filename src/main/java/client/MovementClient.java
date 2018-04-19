@@ -19,12 +19,17 @@ public class MovementClient extends Client {  //Movement client extends from cli
     private boolean isStopping;
     private boolean engineOn;
     private boolean engineOff;
+    private boolean town;
+    private boolean regional;
+    private boolean national;
+    private boolean motorway;
     private String msg;
     private String json;
     private MovementModel movement;
 
     /**
      * Movement Client Constructor.
+     * 
      */
 
     //constructor
@@ -34,6 +39,10 @@ public class MovementClient extends Client {  //Movement client extends from cli
         this.engineOn = false;
         this.isStopping = true;
         this.isMoving = false;
+        town=false;
+        regional=false;
+        national=false;
+        motorway=false;
         this.ENGINEOFF = "Engine OFF";
         this.ENGINEON = "Engine ON";
         this.SLOWDOWN = "SlowDown";
@@ -73,6 +82,23 @@ public class MovementClient extends Client {  //Movement client extends from cli
          case "ENGINEOFF" :
              json = new Gson().toJson(new MovementModel(MovementModel.Operation.ENGINEOFF));
             System.out.println("Engine Off");
+            break;
+         case "TOWN":
+             json = new Gson().toJson(new MovementModel(MovementModel.Operation.TOWN));
+             System.out.println("Town");
+             break;
+         case "REGIONAL":
+             json = new Gson().toJson(new MovementModel(MovementModel.Operation.REGIONAL));
+             System.out.println("Regional");
+             break;
+         case "NATIONAL":
+             json = new Gson().toJson(new MovementModel(MovementModel.Operation.NATIONAL));
+             System.out.println("National");
+             break;
+         case "MOTORWAY":
+             json = new Gson().toJson(new MovementModel(MovementModel.Operation.MOTORWAY));
+             System.out.println("Motorway");
+             break;
          //else print the following:
          default :
             System.out.println("Invalid action");
@@ -94,7 +120,17 @@ public class MovementClient extends Client {  //Movement client extends from cli
         }
        else if (movement.getOperation() == MovementModel.Operation.ENGINEOFF) {
             engineOff = movement.getValue();  
-        }else{
+        }
+         else if (movement.getOperation() == MovementModel.Operation.TOWN) {
+            town = movement.getValue();
+        } else if (movement.getOperation() == MovementModel.Operation.REGIONAL) {
+            regional = movement.getValue();
+        } else if (movement.getOperation() == MovementModel.Operation.NATIONAL) {
+            national = movement.getValue();
+        } else if (movement.getOperation() == MovementModel.Operation.MOTORWAY) {
+            motorway = movement.getValue();
+        } 
+       else{
            System.out.println("No valid action found");
        }
         //print response to ui
