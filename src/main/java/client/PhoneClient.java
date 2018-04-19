@@ -10,8 +10,7 @@ import models.PhoneModel;
 /**
  * Phone Client.
  *
- * Mark McDonald, x14503387
- * Ref: Dominic Carr 
+ * Mark McDonald, x14503387 Ref: Dominic Carr
  */
 public class PhoneClient extends Client { //extends from the client
 
@@ -20,21 +19,22 @@ public class PhoneClient extends Client { //extends from the client
     private final String BLUETOOTHON;
     private final String BLUETOOTHOFF;
     private final String BLUETOOTH;
+    private final String PLAYMUSIC;
     private final String CALLINPROGRESS;
     private final String CANCEL;
     private boolean isConnected;
     private boolean bluetoothOn;
+    private boolean isMusicOn;
     private String msg;
     private String json;
     private PhoneModel phone;
 
-    
     //Phone Constructor.
-     
     public PhoneClient() {
         super();
         this.bluetoothOn = false;
         this.isConnected = false;
+        this.isMusicOn = false;
         this.CANCEL = "Cancel";
         this.CALLINPROGRESS = "Calling";
         this.BLUETOOTH = "Bluetooth";
@@ -42,7 +42,7 @@ public class PhoneClient extends Client { //extends from the client
         this.BLUETOOTHON = "BluetoothOn";
         this.DISCONNECT = "Disconnect";
         this.CONNECT = "Connect";
-        //talks to the phone service
+        this.PLAYMUSIC = "Play" //talks to the phone service
         serviceType = "_phone._udp.local.";
         ui = new PhoneUI(this);//generate PhoneUI
         name = "Phone";
@@ -64,6 +64,10 @@ public class PhoneClient extends Client { //extends from the client
                 json = new Gson().toJson(new PhoneModel(PhoneModel.Operation.DISCONNECT));
                 System.out.println("Disconnect");
                 break;
+            case "PLAYMUSIC":
+                json = new Gson().toJson(new PhoneModel(PhoneModel.Operation.PLAYMUSIC));
+                System.out.println("Play music");
+                break;
             default:
                 System.out.println("Invalid option");
         }
@@ -74,23 +78,22 @@ public class PhoneClient extends Client { //extends from the client
 
         if (phone.getOperation() == PhoneModel.Operation.BLUETOOTH) {
             bluetoothOn = phone.getValue();
-        } 
-        else if (phone.getOperation() == PhoneModel.Operation.CONNECT) {
+        } else if (phone.getOperation() == PhoneModel.Operation.CONNECT) {
             isConnected = phone.getValue();
-        } 
-        else if (phone.getOperation() == PhoneModel.Operation.DISCONNECT) {
+        } else if (phone.getOperation() == PhoneModel.Operation.DISCONNECT) {
             isConnected = phone.getValue();
-        } 
-        else {
+        } else if (phone.getOperation() == PhoneModel.Operation.PLAYMUSIC) {
+            isMusicOn = phone.getValue();
+        } else {
             System.out.println("Not a valid action");
         }
-       
+
         ui.updateArea(phone.getResponse());
     }
 
     @Override
     public void updatePoll(String msg) {
-        json = new Gson().toJson(new PhoneModel(PhoneModel.Operation.CONNECT)); 
+        json = new Gson().toJson(new PhoneModel(PhoneModel.Operation.CONNECT));
         msg = sendMessage(json);//sendMessage is initialized in the client class
         phone = new Gson().fromJson(msg, PhoneModel.class); //converted from gson to json
         System.out.println("Client Received " + json);

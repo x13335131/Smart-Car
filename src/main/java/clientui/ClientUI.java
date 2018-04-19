@@ -17,11 +17,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import client.Client;
+import java.awt.Font;
 
 /**
  * The Class ClientUI.
  *
- * @author dominic
+ * Mark McDonald
+ * ref Dominic Carr
  */
 public abstract class ClientUI extends JPanel implements ActionListener {
 
@@ -29,11 +31,13 @@ public abstract class ClientUI extends JPanel implements ActionListener {
      * The Constant serialVersionUID.
      */
     private static final long serialVersionUID = 1L;
-    protected JComboBox services;//this is where it shows if its marys or joans phone etc
+    protected JComboBox services;//this is where it shows if its dominics or pauls bath etc
     protected JPanel controls;
     protected JTextArea textArea;
     protected JScrollPane scroll;
     protected Client p;
+    Font trb = new Font("TimesRoman", Font.BOLD, 16);
+    Font trb1 = new Font("TimesRoman", Font.BOLD, 14);
 
     public ClientUI(Client a) {
         p = a;
@@ -45,13 +49,21 @@ public abstract class ClientUI extends JPanel implements ActionListener {
         services.addActionListener(actionListener);
         add(services);
         services.setBounds(170, 5, 200, 30);
+        // textArea.setBorder(BorderFactory.createEtchedBorder(Color.red, Color.yellow));
+
         controls = new JPanel();
         controls.setBounds(UIConstants.CONTROLX, UIConstants.CONTROLY, UIConstants.COMPONENTWIDTH,
                 UIConstants.COMPONENTHEIGHT);
         controls.setLayout(new FlowLayout());
-        controls.setBorder(BorderFactory.createLineBorder(Color.black));
+        controls.setBorder(BorderFactory.createLineBorder(Color.gray, UIConstants.BORDERWIDTH, true));
+        controls.setBackground(Color.lightGray);
         add(controls);
         textArea = new JTextArea();
+        textArea.setBorder(BorderFactory.createEtchedBorder(Color.gray, Color.lightGray));
+        textArea.setBackground(Color.lightGray);
+        textArea.setFont(trb);
+       // textArea.setForeground(Color.red);
+        textArea.setEditable(false);
         scroll = new JScrollPane();
         scroll.setViewportView(textArea);
         add(scroll);
@@ -60,6 +72,8 @@ public abstract class ClientUI extends JPanel implements ActionListener {
     public void add(JButton[] a) {
         for (JButton in : a) {
             in.addActionListener(this);
+            in.setFont(trb1);
+            in.setForeground(Color.red);
             controls.add(in);
         }
     }

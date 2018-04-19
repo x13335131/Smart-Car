@@ -15,9 +15,10 @@ import java.util.logging.Logger;
 
 /**
  *
- * Reference: Dominic Carr- https://moodle.ncirl.ie/course/view.php?id=1473 - "project sample"
+ * Reference: Dominic Carr
+ * "project sample"
  *
- * @author Louise O'Connor, x13335131
+ * Mark McDonald & Louise O'Connor
  */
 public class ClientManager implements ServiceListener {
 
@@ -40,7 +41,7 @@ public class ClientManager implements ServiceListener {
         clients.add(new TemperatureClient());
 
         try {
-            //looks for a jdms instance and creates a service listener for all the types of services the clients are interested in eg radio, phone, temp etc
+            //looks for a jmdns instance and creates a service listener for all the types of services the clients are interested in eg radio, phone, temp etc
             jmdns = JmDNS.create(InetAddress.getLocalHost());
             for (Client client : clients) {//for every client it creates a service listener
                 //listener
@@ -66,7 +67,6 @@ public class ClientManager implements ServiceListener {
         arg0.getDNS().requestServiceInfo(arg0.getType(), arg0.getName(), 0);
     }
 
-    
     public void serviceRemoved(ServiceEvent arg0) {//this is checking if a service is being removed- ie if a service is going offline
 
         System.out.println(arg0);

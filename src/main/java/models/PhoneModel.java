@@ -10,7 +10,7 @@ package models;
 public class PhoneModel {
     
     public enum Operation {
-        STATUS, CONNECT, DISCONNECT, BLUETOOTHON, BLUETOOTH, BLUETOOTHOFF, CALLINPROGRESS, CANCEL
+        STATUS, CONNECT, DISCONNECT, BLUETOOTHON, BLUETOOTH, BLUETOOTHOFF,PLAYMUSIC, MSG, CALLINPROGRESS, CANCEL
     }
 
     private Operation operation;
