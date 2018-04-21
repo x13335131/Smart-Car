@@ -30,7 +30,7 @@ public abstract class Client {
     protected String serverHost = "";
     protected int serverPort = 0;
     protected String serviceType = "stuff";
-    protected boolean initialized = false;
+    public boolean initialized = false;
     protected String name = " ";
     protected String GET_STATUS = "{operation: STATUS}";
     protected Socket toServer;

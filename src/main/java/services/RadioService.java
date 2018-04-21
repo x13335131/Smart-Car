@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import models.RadioModel;
@@ -22,12 +23,17 @@ public class RadioService extends Service { //extends service class
     private String currentStation;
     String nextStation;
     String previousStation;
+    String msg;
+    String json;
     int i = 0;
+    String SERVICE_UI_MESSAGE;
     List<String> StationsList = new ArrayList<>();
     ListIterator<String> listIterator;
 
     public RadioService(String name) {
         super(name, "_radio._udp.local.");
+        
+        System.out.println(name);
         isRadioON = false;
         ui = new ServiceUI(this, name);
         StationsList.add("Spin 103.8");
@@ -52,44 +58,54 @@ public class RadioService extends Service { //extends service class
         } else {
             switch (radio.getOperation()) { //depending on action do one of following:
                 case STATUS: {
-                    String msg = getStatus();
-                    String json = new Gson().toJson(new RadioModel(RadioModel.Operation.STATUS, msg));
+                     msg = getStatus();
+                    json = new Gson().toJson(new RadioModel(RadioModel.Operation.STATUS, msg));
                     sendBack(json); //sends back status 
                     break;
                 }
                 case RADIOON: {
+                    System.out.println("HEREEEE");
                     RadioOn();
-                    String msg = (isRadioON) ? "Radio ON" : "Radio Already On";
-                    String json = new Gson().toJson(new RadioModel(RadioModel.Operation.RADIOON, msg));
+                     msg = (isRadioON) ? "Radio ON" : "Radio Already On";
+                    json = new Gson().toJson(new RadioModel(RadioModel.Operation.RADIOON, msg));
                     sendBack(json); //sends back status 
-                    String serviceMessage = (isRadioON) ? "Radio ON" : "Radio Already On";
-                    ui.updateArea(serviceMessage);
+                    SERVICE_UI_MESSAGE = (isRadioON) ? "Radio ON" : "Radio Already On";
+                    ui.updateArea(SERVICE_UI_MESSAGE);
                     break;
                 }
+                case ISRADIOON: {
+                     msg = (isRadioON) ? "Radio ON -connected Audio" : "Radio OFF";
+                    json = new Gson().toJson(new RadioModel(RadioModel.Operation.ISRADIOON, msg, isRadioON));
+                    sendBack(json); //sends back status 
+                    SERVICE_UI_MESSAGE = (isRadioON) ? "Radio ON" : "Radio OFF";
+                    ui.updateArea(SERVICE_UI_MESSAGE);
+                    break;
+                }
+                
                 case RADIOOFF: {
                     RadioOFF();
-                    String msg = (isRadioON) ? "Radio ON" : "Radio OFF";
-                    String json = new Gson().toJson(new RadioModel(RadioModel.Operation.RADIOOFF, msg));
+                    msg = (isRadioON) ? "Radio ON" : "Radio OFF";
+                    json = new Gson().toJson(new RadioModel(RadioModel.Operation.RADIOOFF, msg));
                     sendBack(json); //sends back status 
-                    String serviceMessage = (isRadioON) ? "Radio ON" : "Radio OFF";
-                    ui.updateArea(serviceMessage);
+                    SERVICE_UI_MESSAGE = (isRadioON) ? "Radio ON" : "Radio OFF";
+                    ui.updateArea(SERVICE_UI_MESSAGE);
                     break;
                 }
                 case NEXT: {
                     NextStation();
-                    String msg = currentStation;
+                    msg = currentStation ;
                     System.out.println("msg" + msg);
-                    String json = new Gson().toJson(new RadioModel(RadioModel.Operation.NEXT, msg));
+                    json = new Gson().toJson(new RadioModel(RadioModel.Operation.NEXT, msg));
                     sendBack(json); //sends back status 
-                    String serviceMessage = currentStation;
-                    ui.updateArea(serviceMessage);
+                    SERVICE_UI_MESSAGE = currentStation;
+                    ui.updateArea(SERVICE_UI_MESSAGE);
                     break;
                 }
                 case PREVIOUS: {
                     PreviousStation();
-                    String msg = currentStation;
+                    msg = currentStation  ;
                     System.out.println("msg" + msg);
-                    String json = new Gson().toJson(new RadioModel(RadioModel.Operation.PREVIOUS, msg));
+                    json = new Gson().toJson(new RadioModel(RadioModel.Operation.PREVIOUS, msg));
                     sendBack(json); //sends back status 
                     String serviceMessage = currentStation;
                     ui.updateArea(serviceMessage);
@@ -172,4 +188,6 @@ public class RadioService extends Service { //extends service class
     public static void main(String[] args) {
         new RadioService(Constants.Radio_service_name);
     }
+
+  
 }
