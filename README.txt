@@ -22,18 +22,5 @@ the increase and decrease buttons and then clicking the confirm button.
 
 
 *************************************************************
-LOUISE - 
-	MOVEMENT CLIENTS/MODELS/SERVICES
-	RADIO CLIENTS/MODELS/SERVICES
-	Commented above classes
-	Connecting phone service to radio service with Mark present
-	UI adjustments/fixes (ie controls section wasnt big enough to take in all buttons)
-	Tidying code and making more efficient by adding extra classes(constants & runAllServices classes)
-	Editing client to use json for data exchange
 
-MARK -  
-	PHONE CLIENT/MODEL/SERVICE
- 	TEMPERATURE CLIENT/MODEL/SERVICE
-	Commented above classes
-	UI modification (colors/font)
 	
